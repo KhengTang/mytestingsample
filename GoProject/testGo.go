@@ -25,11 +25,13 @@ func main() {
 }
 
 func testSlice() {
-	names := [4]string{
+	names := [6]string{
 		"John",
 		"Paul",
 		"George",
 		"Ringo",
+		"Bob",
+		"Tom",
 	}
 
 	a := names[0:2]
