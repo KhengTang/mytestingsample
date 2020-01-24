@@ -11,7 +11,7 @@ type Vertex struct {
 
 var (
 	v1 = Vertex{1, 2}
-	v2 = Vertex{3}
+	v2 = Vertex{X : 3}
 	v3 = Vertex{}
 	p  = &Vertex{3, 4}
 )
