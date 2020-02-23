@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
@@ -63,7 +64,7 @@ func userInput() int {
 
 	fmt.Printf("Enter value (-1 to quit): ")
 	_, err = fmt.Scanf("%d\n", &val)
-	if err != nil || val < 1 || val > 9 {
+	if err != nil || val < 0 || val > 9 {
 		fmt.Println("Value must be between 1 - 9\n Value enter : ", val, err)
 		return checkExit(val)
 	}
@@ -74,10 +75,26 @@ func userInput() int {
 }
 
 func fillBoard(row, col, val int) {
-	fullBoard[col].cell[row] = val
+	if val == 0 {
+		fullBoard[row].cell[col] = val
+		return
+	}
+	for i := 0; i < 9; i++ {
+		if fullBoard[row].cell[i] == val {
+			fmt.Printf("\n%d row contain duplicate value : %d\n", row+1, val)
+			return
+		}
+		if fullBoard[i].cell[col] == val {
+			fmt.Printf("\n%d col contain duplicate value : %d\n", col+1, val)
+			return
+		}
+	}
+	fullBoard[row].cell[col] = val
 }
 
 func clearScreen() {
+	fmt.Print("Press 'Enter' to continue...")
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 	cmd := exec.Command("cmd", "/c", "cls")
 	cmd.Stdout = os.Stdout
 	cmd.Run()
