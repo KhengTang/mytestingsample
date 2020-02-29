@@ -14,14 +14,25 @@ type oneBoard struct {
 var fullBoard [9]oneBoard
 
 func main() {
-	board()
+	choice := 0
+
 	for {
-		exit := userInput()
-		if exit == 0 {
+		if choice == 0 {
+			choice = option()
+		}
+		if choice == 1 {
+			board()
+			input := userInput()
+			if input == 0 {
+				choice = input
+			}
+			clearScreen()
+		}
+		if choice == 2 {
+			fmt.Printf("Quitting sudoku")
 			break
 		}
-		clearScreen()
-		board()
+
 	}
 }
 
@@ -74,22 +85,75 @@ func userInput() int {
 	return 1
 }
 
+func option() int {
+	userInput := 0
+	for {
+		fmt.Printf("Enter a number :\n")
+		fmt.Printf("Play sudoku - 1\n")
+		fmt.Printf("Quit        - 2\n")
+
+		fmt.Scanf("%d\n", &userInput)
+
+		if userInput == 1 || userInput == 2 {
+			break
+		}
+
+		fmt.Printf("Enter a vaild number\n")
+		clearScreen()
+	}
+
+	return userInput
+}
+
 func fillBoard(row, col, val int) {
 	if val == 0 {
 		fullBoard[row].cell[col] = val
 		return
 	}
-	for i := 0; i < 9; i++ {
-		if fullBoard[row].cell[i] == val {
-			fmt.Printf("\n%d row contain duplicate value : %d\n", row+1, val)
-			return
-		}
-		if fullBoard[i].cell[col] == val {
-			fmt.Printf("\n%d col contain duplicate value : %d\n", col+1, val)
-			return
-		}
+	valid := validMove(row, col, val)
+	if valid == -1 {
+		return
 	}
 	fullBoard[row].cell[col] = val
+}
+
+func validMove(row, col, val int) int {
+	for i := 0; i < 9; i++ {
+		// Check row
+		if fullBoard[row].cell[i] == val {
+			fmt.Printf("\n%d row contain duplicate value : %d\n", row+1, val)
+			return -1
+		}
+		// Check col
+		if fullBoard[i].cell[col] == val {
+			fmt.Printf("\n%d col contain duplicate value : %d\n", col+1, val)
+			return -1
+		}
+	}
+	if row <= 3 {
+		// Row 1 - 3
+		if col <= 3 {
+			// Column 1 - 3
+		} else if col <= 6 {
+			// Column 4 - 6
+		} else {
+			// Column 7 - 9
+		}
+	} else if row <= 6 {
+		// Row 4 - 6
+
+	} else {
+		// Row 7 - 9
+	}
+	return 0
+}
+
+func checkSquareRow(row int) {
+
+}
+
+func checkSquareCol(col int) {
+
 }
 
 func clearScreen() {
