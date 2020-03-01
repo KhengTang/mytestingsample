@@ -18,18 +18,22 @@ func main() {
 
 	for {
 		if choice == 0 {
+			// Menu page
 			choice = option()
 		}
 		if choice == 1 {
 			board()
 			input := userInput()
 			if input == 0 {
+				// Exit game
 				choice = input
 			}
 			clearScreen()
 		}
-		if choice == 2 {
-			fmt.Printf("Quitting sudoku")
+		if choice == -1 {
+			// Quit program
+			fmt.Printf("Quitting sudoku\n")
+			clearScreen()
 			break
 		}
 
@@ -62,39 +66,49 @@ func userInput() int {
 	fmt.Printf("Enter row (-1 to quit): ")
 	_, err := fmt.Scanf("%d\n", &row)
 	if err != nil || row < 1 || row > 9 {
-		fmt.Println("Value must be between 1 - 9\n Value enter : ", row, err)
-		return checkExit(row)
+		return checkValidInput(row, err)
 	}
 
 	fmt.Printf("Enter col (-1 to quit): ")
 	_, err = fmt.Scanf("%d\n", &col)
 	if err != nil || col < 1 || col > 9 {
-		fmt.Println("Value must be between 1 - 9\n Value enter : ", col, err)
-		return checkExit(col)
+		return checkValidInput(col, err)
 	}
 
-	fmt.Printf("Enter value (-1 to quit): ")
+	fmt.Printf("Enter value (0 to clear cell) (-1 to quit): ")
 	_, err = fmt.Scanf("%d\n", &val)
-	if err != nil || val < 0 || val > 9 {
-		fmt.Println("Value must be between 1 - 9\n Value enter : ", val, err)
-		return checkExit(val)
+	if val != 0 {
+		if err != nil || val < 1 || val > 9 {
+			return checkValidInput(val, err)
+		}
 	}
+
 	fmt.Printf("Row : %d, Col : %d, Value : %d\n", row, col, val)
 
 	fillBoard(row-1, col-1, val)
 	return 1
 }
 
+func checkValidInput(input int, err error) int {
+	if input == -1 {
+		fmt.Printf("Exiting game\n")
+	} else {
+		fmt.Println("Value must be between 1 - 9\n Value enter : ", input, err)
+	}
+	return checkExit(input)
+
+}
+
 func option() int {
 	userInput := 0
 	for {
 		fmt.Printf("Enter a number :\n")
-		fmt.Printf("Play sudoku - 1\n")
-		fmt.Printf("Quit        - 2\n")
+		fmt.Printf("(1)Play sudoku\n")
+		fmt.Printf("(-1)Quit\n")
 
 		fmt.Scanf("%d\n", &userInput)
 
-		if userInput == 1 || userInput == 2 {
+		if userInput == 1 || userInput == -1 {
 			break
 		}
 
@@ -130,30 +144,31 @@ func validMove(row, col, val int) int {
 			return -1
 		}
 	}
-	if row <= 3 {
-		// Row 1 - 3
-		if col <= 3 {
-			// Column 1 - 3
-		} else if col <= 6 {
-			// Column 4 - 6
-		} else {
-			// Column 7 - 9
-		}
-	} else if row <= 6 {
-		// Row 4 - 6
 
-	} else {
-		// Row 7 - 9
+	return checkSquareRow((row-1)/3, col/3, val)
+}
+
+func checkSquareRow(row, col, val int) int {
+	ret := 0
+	for i := row * 3; i < (row+1)*3; i++ {
+		ret = checkSquareCol(i, col, val)
+		if ret == -1 {
+			return ret
+		}
+	}
+	return ret
+}
+
+func checkSquareCol(row, col, val int) int {
+	for i := col * 3; i < (col+1)*3; i++ {
+		if fullBoard[row].cell[i] == val {
+			var box int
+			box = ((row+1)/3)*3 - 3 + col
+			fmt.Printf("\nBox %d contain duplicate value : %d\n", box, val)
+			return -1
+		}
 	}
 	return 0
-}
-
-func checkSquareRow(row int) {
-
-}
-
-func checkSquareCol(col int) {
-
 }
 
 func clearScreen() {
