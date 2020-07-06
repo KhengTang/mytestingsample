@@ -29,33 +29,51 @@ def checkInput():
   return False, row, col, val
   
 def fillBoard(row, col, val):
-  exist = checkLine(row, col, val)
+  exist = checkInvalidMove(row, col, val)
   if(exist):
     return
   board[row][col] = val
   
-def checkLine(row, col, val):
+def checkInvalidMove(row, col, val):
+  if(val == 0):
+    return False
   for i in range(cols):
     if(board[row][i] == val):
       print("Value " + str(val) + " exist in board[" + str(row+1) + "][" + str(i+1) + "]. Please try another cell")
       return True
   
-  for i in range(row):
+  for i in range(rows):
     if(board[i][col] == val):
       print("Value " + str(val) + " exist in board[" + str(i+1) + "][" + str(col+1) + "]. Please try another cell")
-      return True  
+      return True
+      
+  boxR = row // 3 * 3
+  boxC = col // 3 * 3
+  for i in range(3):
+    for j in range(3):
+      if(board[i+boxR][j+boxC] == val):
+        print("Value " + str(val) + " exist in board[" + str(i+boxR+1) + "][" + str(j+boxC+1) + "]. Please try another cell")
+        return True
       
   return False
       
-def game():
+def sudoku():
   printBoard()
   exit, row, col, val = checkInput()
   
   if(exit):
     return
   fillBoard(row-1, col-1, val)
-  game()
+  sudoku()
+  
+def solve():
+  return
+  
+def quit():
+  return
 
-print("game()")  
+print("sudoku")
+print("solve")
+print("quit")
 choices = input("Enter your choices: ")
-eval(choices)
+eval(choices+"()")
