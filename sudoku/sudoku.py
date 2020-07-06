@@ -63,11 +63,39 @@ def sudoku():
   
   if(exit):
     return
+  
   fillBoard(row-1, col-1, val)
+  
+  if(complete()):
+    print("Sudoku complete")
+  
   sudoku()
   
+def complete():
+  for i in range(rows):
+    for j in range(cols):
+      if(board[i][j] == 0):
+        return False, i, j
+  
+  return True, i, j
+  
 def solve():
-  return
+  done, row, col = complete()
+  
+  if(done):
+    printBoard()
+    return True
+  
+  for k in range(1, 10):
+    if(not checkInvalidMove(row, col, k)):
+      board[row][col] = k
+      
+      if(solve()):
+        return True
+    
+      board[row][col] = 0
+  
+  return False
   
 def quit():
   return
