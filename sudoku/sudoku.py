@@ -13,16 +13,34 @@ def printBoard():
       print("______________________"),
     print("")
     
-def checkInput():
+def checkInput(usrStr, min):
+  while(True):
+    try:
+      val = int(input("Enter " + usrStr + " between " + str(min+1) + " - 9: "))
+      if(min == -1):
+        min = -2
+    except ValueError:
+      print("Please enter a valid integer")
+      continue
+    if (val == min or val < -1 or val > 9):
+      print("Please enter a valid " + usrStr)
+      continue
+    else:
+      break
+  
+  return val
+    
+def userInput():
   print("")
   print("Enter -1 to exit")
-  row = int(input("Enter row: "))
+  
+  row = checkInput("row", 0)
   if(row == -1):
     return True, 0, 0, 0
-  col = int(input("Enter col: "))
+  col = checkInput("col", 0)
   if(col == -1):
     return True, 0, 0, 0
-  val = int(input("Enter val: "))
+  val = checkInput("val", -1)
   if(val == -1):
     return True, 0, 0, 0
   
@@ -59,7 +77,7 @@ def checkInvalidMove(row, col, val):
       
 def sudoku():
   printBoard()
-  exit, row, col, val = checkInput()
+  exit, row, col, val = userInput()
   
   if(exit):
     return
