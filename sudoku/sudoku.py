@@ -32,7 +32,7 @@ def checkInput(usrStr, min):
     
 def userInput():
   print("")
-  print("Enter -1 to exit")
+  print("Enter -1 to go to menu")
   
   row = checkInput("row", 0)
   if(row == -1):
@@ -80,7 +80,7 @@ def sudoku():
   exit, row, col, val = userInput()
   
   if(exit):
-    return
+    return menu()
   
   fillBoard(row-1, col-1, val)
   
@@ -117,9 +117,22 @@ def solve():
   
 def quit():
   return
+  
+def menu():
+  print("sudoku")
+  print("solve")
+  print("quit")
+  choices = input("Enter your choices: ")
+  choices = choices.lower()
+  
+  while choices not in {"sudoku", "solve", "quit"}:
+    print("Please enter only from the choices below:")
+    print("sudoku")
+    print("solve")
+    print("quit")
+    choices = input("Enter your choices: ")
+    choices = choices.lower()
 
-print("sudoku")
-print("solve")
-print("quit")
-choices = input("Enter your choices: ")
-eval(choices+"()")
+  eval(choices+"()")
+
+menu()
