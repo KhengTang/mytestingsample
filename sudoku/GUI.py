@@ -1,37 +1,47 @@
 from tkinter import *
+from tkinter.ttk import Separator, Style
+
+rows, cols = 9, 9
+board = [[0 for i in range(cols)] for j in range(rows)]
 
 window = Tk()
+window.title("Sudoku")
 
-userInput = Entry(window)
-userInput.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
-
-def button_add():
+def start():
   return
-btn_1 = Button(window, text="1", padx=40, pady=20, command=button_add)
-btn_2 = Button(window, text="2", padx=40, pady=20, command=button_add)
-btn_3 = Button(window, text="3", padx=40, pady=20, command=button_add)
-btn_4 = Button(window, text="4", padx=40, pady=20, command=button_add)
-btn_5 = Button(window, text="5", padx=40, pady=20, command=button_add)
-btn_6 = Button(window, text="6", padx=40, pady=20, command=button_add)
-btn_7 = Button(window, text="7", padx=40, pady=20, command=button_add)
-btn_8 = Button(window, text="8", padx=40, pady=20, command=button_add)
-btn_9 = Button(window, text="9", padx=40, pady=20, command=button_add)
-btn_0 = Button(window, text="0", padx=40, pady=20, command=button_add)
 
-# Put button on screen
+def solve():
+  return
+  
+def close(r,c,v):
+  board[r][c] = v
+  window.newWindow.destroy()
 
-btn_1.grid(row=3, column=0)
-btn_2.grid(row=3, column=1)
-btn_3.grid(row=3, column=2)
+def button_click(r,c):
+  window.newWindow = Toplevel(window)
+  input = Entry(window.newWindow)
+  buttonExample = Button(window.newWindow, text = "Fill", command=lambda: close(r,c,input))
 
-btn_4.grid(row=2, column=0)
-btn_5.grid(row=2, column=1)
-btn_6.grid(row=2, column=2)
+  input.pack()
+  buttonExample.pack()
+  
+myCanvas = Canvas(window, width=500, height=500, background='black')
+myCanvas.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+  
+button_start = Button(window, text="Start", padx=30, pady=10, command=start)
+button_solve = Button(window, text="Solve", padx=30, pady=10, command=solve)
+button_quit = Button(window, text="Quit", padx=30, pady=10, command=window.destroy)
 
-btn_7.grid(row=1, column=0)
-btn_8.grid(row=1, column=1)
-btn_9.grid(row=1, column=2)
+button_start.grid(row=0, column=0, columnspan=3)
+button_solve.grid(row=0, column=3, columnspan=3)
+button_quit.grid(row=0, column=6, columnspan=3)
 
-btn_0.grid(row=4, column=0)
+for i in range(rows):
+  for j in range(cols):
+    board[i][j] = Button(window, text=str(board[i][j]), padx=10, pady=10, command=lambda: button_click(i,j))
+
+for i in range(rows):
+  for j in range(cols):
+    board[i][j].grid(row=i+1, column=j)
 
 window.mainloop()
