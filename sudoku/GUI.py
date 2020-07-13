@@ -12,9 +12,59 @@ def start():
   return
 
 def solve():
-  return
+  done, row, col = complete()
+  
+  if(done):
+    return True
+  
+  for k in range(1, 10):
+    if(not checkInvalidMove(row, col, str(k))):
+      board[row][col]['text'] = str(k)
+      board[row][col]['bg'] = 'green'
+      
+      if(solve()):
+        return True
+    
+      board[row][col]['text'] = str(0)
+  
+  return False
+  
+def complete():
+  for i in range(rows):
+    for j in range(cols):
+      if(board[i][j]['text'] == str(0)):
+        return False, i, j
+  
+  return True, i, j
+  
+def checkInvalidMove(row, col, val):
+  if(val == 0):
+    return False
+  for i in range(cols):
+    if(board[row][i]['text'] == val):
+      print("Value " + str(val) + " exist in board[" + str(row+1) + "][" + str(i+1) + "]. Please try another cell")
+      return True
+  
+  for i in range(rows):
+    if(board[i][col]['text'] == val):
+      print("Value " + str(val) + " exist in board[" + str(i+1) + "][" + str(col+1) + "]. Please try another cell")
+      return True
+      
+  boxR = row // 3 * 3
+  boxC = col // 3 * 3
+  for i in range(3):
+    for j in range(3):
+      if(board[i+boxR][j+boxC]['text'] == val):
+        print("Value " + str(val) + " exist in board[" + str(i+boxR+1) + "][" + str(j+boxC+1) + "]. Please try another cell")
+        return True
+      
+  return False
   
 def close(r,c,v):
+  if (checkInvalidMove(r,c,str(v))):
+    board[r][c]['bg'] = 'red'
+  else:
+    board[r][c]['bg'] = 'green'
   board[r][c]['text'] = str(v)
   window.newWindow.destroy()
 
@@ -40,7 +90,7 @@ button_quit.grid(row=0, column=6, columnspan=3)
 
 for i in range(rows):
   for j in range(cols):
-    board[i][j] = Button(window, text=str(board[i][j]), padx=10, pady=10, command=lambda i=i,j=j: button_click(i,j))
+    board[i][j] = Button(window, text=str(board[i][j]), bg = 'white', padx=10, pady=10, command=lambda i=i,j=j: button_click(i,j))
 
 for i in range(rows):
   for j in range(cols):
