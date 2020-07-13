@@ -8,20 +8,22 @@ window = Tk()
 window.title("Sudoku")
 
 def start():
+  boardBtn[2][1]['text'] = str(5)
   return
 
 def solve():
   return
   
 def close(r,c,v):
-  board[r][c] = v
+  board[r][c]['text'] = str(v)
   window.newWindow.destroy()
 
 def button_click(r,c):
   window.newWindow = Toplevel(window)
+  l = Label(window.newWindow, text="Value")
   input = Entry(window.newWindow)
-  buttonExample = Button(window.newWindow, text = "Fill", command=lambda: close(r,c,input))
-
+  buttonExample = Button(window.newWindow, text = "Ok", command=lambda: close(r,c,input.get()))
+  l.pack()
   input.pack()
   buttonExample.pack()
   
@@ -38,7 +40,7 @@ button_quit.grid(row=0, column=6, columnspan=3)
 
 for i in range(rows):
   for j in range(cols):
-    board[i][j] = Button(window, text=str(board[i][j]), padx=10, pady=10, command=lambda: button_click(i,j))
+    board[i][j] = Button(window, text=str(board[i][j]), padx=10, pady=10, command=lambda i=i,j=j: button_click(i,j))
 
 for i in range(rows):
   for j in range(cols):
